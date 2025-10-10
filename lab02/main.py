@@ -18,7 +18,12 @@ print("Завдання 2------")
 
 def task2():
     sum_price = float(input("Введіть суму покупки"))
-    sum_buy = 0
+    while sum_price < 0:
+        sum_price = float(input("Введіть суму покупки"))
+        sum_buy = 0
+        if sum_price < 0:
+            print("не може бути  від'ємне число")
+
     if sum_price < 500:
         sum_buy = sum_price
         print("Загальна ціна", sum_buy)
@@ -39,7 +44,13 @@ print("Завдання 3------")
 def task3():
 
     dov_osn = float(input("Введіть довжину основи: "))
+    while dov_osn <= 0:
+        if dov_osn <= 0:
+            print("не може бути  від'ємне число")
     dov_stor = float(input("Введіть довжину рівнобедрених сторін: "))
+    while dov_stor <= 0:
+        if dov_stor <= 0:
+            print("не може бути  від'ємне число")
     piv_per = (dov_osn + 2 * dov_stor) / 2
     print(piv_per)
     S = math.sqrt(piv_per * (piv_per - dov_stor) * (piv_per - dov_stor) * (piv_per - dov_osn))
