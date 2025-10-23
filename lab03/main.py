@@ -1,12 +1,16 @@
 import re
 
 
-text = input("Введіть текст (не більше 1000 слів)")
+text = input("Введіть текст")
 
 
 # Task 1
 def task1():
+
     good = False
+    if text == "":
+        print("Ви нічого не ввели")
+        return
     if re.fullmatch(r"[А-Яа-яІіЇїЄєҐґ.?,\-=+:;!'\"\s]+", text):
         words = text.split()
         if len(words) > 1000:
@@ -36,6 +40,9 @@ def task1():
 
 # Task 2
 def task2():
+    if text == "":
+        print("Ви нічого не ввели")
+        return
     if re.fullmatch(r"[А-Яа-яІіЇїЄєҐґ.?,\-=+:;!'\"\s]+", text):
         number_caps_letter = text.count("а")
         letters_a = text.replace("а", "А")
@@ -50,6 +57,9 @@ def task2():
 
 # Task 3
 def task3():
+    if text == "":
+        print("Ви нічого не ввели")
+        return
     good = False
     number_current_word = 0
     if re.fullmatch(r"[А-Яа-яІіЇїЄєҐґ.?,\-=+:;!'\"\s]+", text):
@@ -74,6 +84,9 @@ def task3():
 
 
 def task4():
+    if text == "":
+        print("Ви нічого не ввели")
+        return
     if re.fullmatch(r"[А-Яа-яІіЇїЄєҐґ.?,\-=+:;!'\"\s]+", text):
         mid = len(text) // 2
         medium_text_rev = text[:mid]
@@ -82,10 +95,13 @@ def task4():
         new_text = ''
         if medium_text_rev:
             words_medium_text_rev = medium_text_rev.title()
+        else:
+            print("ваш рядок замалий")
+            return
         if medium_text_after:
             split_after_mid_text = medium_text_after.split()
             words_medium_text_after = ' *'.join(split_after_mid_text)
-            new_text = words_medium_text_rev + ' | ' + words_medium_text_after.lower()
+            new_text = words_medium_text_rev + ' | *' + words_medium_text_after.lower()
         print(new_text)
     else:
         print("Текст не український, або не зрозумілі розділові знаки")
@@ -93,6 +109,9 @@ def task4():
 
 
 def task5():
+    if text == "":
+        print("Ви нічого не ввели")
+        return
     if re.fullmatch(r"[A-Za-z.?,\-=+:;!'\"\s]+", text):
         words = text.split()
         if len(words) > 3000:
@@ -108,20 +127,19 @@ def task5():
         selected_p = [clean_text for clean_text in split_clean_text
                       if clean_text.lower().startswith(leter_p.lower())]
         all_text = selected_n + selected_p
-        if all_text == "":
-            print("В тексті немає N та P")
-        for ch in all_text:
-            if ch.isalpha() and not ('a' <= ch.lower() <= 'z'):
-                print(all_text)
-            else:
-                print("Присутні не англійські літери")
-
+        if not all_text:
+            print("В тексті немає слів що починаються на N та P")
+        else:
+            print(all_text)
     else:
         print("Текст не англійський, або не зрозумілі розділові знаки")
         return
 
 
 def task6():
+    if text == "":
+        print("Ви нічого не ввели")
+        return
     if re.fullmatch(r"[A-Za-z.?,\-=+:;!'\" 0-9\s]+", text):
         words = text.split()
         if len(words) > 100:
@@ -131,9 +149,6 @@ def task6():
         gol_letter = 0
         gol = "ayuioe"
         gol_letter = sum(1 for ch in lower_text if ch in gol)
-        # if re.fullmatch(r"[auyeoi]+", lower_text):
-        #     gol_letter += 1
-        # print(gol_letter)
         print("Кількість голосних літер: ", gol_letter)
     else:
         print("Текст не англійський, або не зрозумілі розділові знаки")
@@ -141,6 +156,9 @@ def task6():
 
 
 def task7():
+    if text == "":
+        print("Ви нічого не ввели")
+        return
     if re.fullmatch(r"[A-Za-z.?,\-=+:;!'\" 0-9\s]+", text):
         words = text.split()
         if len(words) > 1000:
@@ -149,19 +167,24 @@ def task7():
         cleans_text = re.sub(r"[^A-Za-z\s]+", "", text)
         split_clean_text = cleans_text.split()
         upper_words = []
+
         for upper_letter in split_clean_text:
             if upper_letter[0].isupper():
                 upper_words.append(upper_letter)
-        print("Слова з великої літери: ", upper_words)
+        if upper_words:
+            print("Слова з великої літери: ", upper_words)
+        else:
+            print("Немає слів з великої літери")
+            return
     else:
         print("Текст не англійський, або не зрозумілі розділові знаки")
         return
 
 
 # task1()
-# task2()
+task2()
 # task3()
 # task4()
-task5()
+# task5()
 # task6()
 # task7()
