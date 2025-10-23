@@ -6,11 +6,7 @@ text = input("Введіть текст")
 
 # Task 1
 def task1():
-
     good = False
-    if text == "":
-        print("Ви нічого не ввели")
-        return
     if re.fullmatch(r"[А-Яа-яІіЇїЄєҐґ.?,\-=+:;!'\"\s]+", text):
         words = text.split()
         if len(words) > 1000:
@@ -40,9 +36,6 @@ def task1():
 
 # Task 2
 def task2():
-    if text == "":
-        print("Ви нічого не ввели")
-        return
     if re.fullmatch(r"[А-Яа-яІіЇїЄєҐґ.?,\-=+:;!'\"\s]+", text):
         number_caps_letter = text.count("а")
         letters_a = text.replace("а", "А")
@@ -57,10 +50,10 @@ def task2():
 
 # Task 3
 def task3():
+
     if text == "":
-        print("Ви нічого не ввели")
+        print("рядок пустий")
         return
-    good = False
     number_current_word = 0
     if re.fullmatch(r"[А-Яа-яІіЇїЄєҐґ.?,\-=+:;!'\"\s]+", text):
         current_word = input("Введість слово яке хочете знайти")
@@ -85,7 +78,7 @@ def task3():
 
 def task4():
     if text == "":
-        print("Ви нічого не ввели")
+        print("рядок пустий")
         return
     if re.fullmatch(r"[А-Яа-яІіЇїЄєҐґ.?,\-=+:;!'\"\s]+", text):
         mid = len(text) // 2
@@ -96,7 +89,7 @@ def task4():
         if medium_text_rev:
             words_medium_text_rev = medium_text_rev.title()
         else:
-            print("ваш рядок замалий")
+            print("Надто короткий текст")
             return
         if medium_text_after:
             split_after_mid_text = medium_text_after.split()
@@ -110,7 +103,7 @@ def task4():
 
 def task5():
     if text == "":
-        print("Ви нічого не ввели")
+        print("рядок пустий")
         return
     if re.fullmatch(r"[A-Za-z.?,\-=+:;!'\"\s]+", text):
         words = text.split()
@@ -128,7 +121,7 @@ def task5():
                       if clean_text.lower().startswith(leter_p.lower())]
         all_text = selected_n + selected_p
         if not all_text:
-            print("В тексті немає слів що починаються на N та P")
+            print("В тексті немає слів, що починаються з N або P")
         else:
             print(all_text)
     else:
@@ -138,7 +131,7 @@ def task5():
 
 def task6():
     if text == "":
-        print("Ви нічого не ввели")
+        print("рядок пустий")
         return
     if re.fullmatch(r"[A-Za-z.?,\-=+:;!'\" 0-9\s]+", text):
         words = text.split()
@@ -157,7 +150,7 @@ def task6():
 
 def task7():
     if text == "":
-        print("Ви нічого не ввели")
+        print("рядок пустий")
         return
     if re.fullmatch(r"[A-Za-z.?,\-=+:;!'\" 0-9\s]+", text):
         words = text.split()
@@ -167,7 +160,6 @@ def task7():
         cleans_text = re.sub(r"[^A-Za-z\s]+", "", text)
         split_clean_text = cleans_text.split()
         upper_words = []
-
         for upper_letter in split_clean_text:
             if upper_letter[0].isupper():
                 upper_words.append(upper_letter)
@@ -175,15 +167,14 @@ def task7():
             print("Слова з великої літери: ", upper_words)
         else:
             print("Немає слів з великої літери")
-            return
     else:
         print("Текст не англійський, або не зрозумілі розділові знаки")
         return
 
 
 # task1()
-task2()
-# task3()
+# task2()
+task3()
 # task4()
 # task5()
 # task6()
