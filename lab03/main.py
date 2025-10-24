@@ -50,7 +50,7 @@ def task2():
 
 # Task 3
 def task3():
-
+    good = False
     if text == "":
         print("рядок пустий")
         return
