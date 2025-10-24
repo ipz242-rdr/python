@@ -84,7 +84,7 @@ def task4():
             words_medium_text_rev = medium_text_rev.title()
         if medium_text_after:
             split_after_mid_text = medium_text_after.split()
-            words_medium_text_after = ' *'.join(split_after_mid_text)
+            words_medium_text_after = ' '.join(word + '*' for word in split_after_mid_text)
             new_text = words_medium_text_rev + ' | ' + words_medium_text_after.lower()
         print(new_text)
     else:
@@ -161,7 +161,7 @@ def task7():
 # task1()
 # task2()
 # task3()
-# task4()
-task5()
+task4()
+# task5()
 # task6()
 # task7()
