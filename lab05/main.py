@@ -1,4 +1,4 @@
-def task1(n, output_format):
+def find_primes(n, output_format):
     try:
         limit = int(n)
     except ValueError:
@@ -32,11 +32,44 @@ def task1(n, output_format):
         return f"Невідомий формат: {output_format}"
 
 
-task1Test1 = task1(56, 'list')
+def analyze_nested_categories(data):
+    unique_categories = set()
+    total_sums = {}
+
+    def process_element(element):
+        if isinstance(element, list):
+            for item in element:
+                process_element(item)
+        elif isinstance(element, dict):
+            for category, amount in element.items():
+                unique_categories.add(category)
+
+                total_sums[category] = total_sums.get(category, 0) + amount
+        pass
+    process_element(data)
+    return (list(unique_categories), total_sums)
+
+
+task1Test1 = find_primes(56, 'list')
 print(task1Test1)
 print('---------')
-task1Test2 = task1(20, 'column')
+task1Test2 = find_primes(20, 'column')
 print('---------')
-task1Test3 = task1(20, 'count')
+task1Test3 = find_primes(20, 'count')
 print(task1Test3)
 print('---------')
+
+
+nested_data = [
+    [{"офіс": 100}, {"маркетинг": 200}],
+    [
+        [{"офіс": 50}, {"маркетинг": 150}],
+        {"офіс": 200}
+    ],
+    {"офіс": 300},
+    [{"офіс": 100, "extra": 1}]
+]
+result = analyze_nested_categories(nested_data)
+print(f"Результат: {result}")
+
+
