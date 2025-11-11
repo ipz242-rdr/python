@@ -93,8 +93,8 @@ def task4():
             return
         if medium_text_after:
             split_after_mid_text = medium_text_after.split()
-            words_medium_text_after = ' *'.join(split_after_mid_text)
-            new_text = words_medium_text_rev + ' | *' + words_medium_text_after.lower()
+            words_medium_text_after = ' '.join(word + '*' for word in split_after_mid_text)
+            new_text = words_medium_text_rev + ' | ' + words_medium_text_after.lower()
         print(new_text)
     else:
         print("Текст не український, або не зрозумілі розділові знаки")
@@ -174,8 +174,8 @@ def task7():
 
 # task1()
 # task2()
-task3()
-# task4()
+# task3()
+task4()
 # task5()
 # task6()
 # task7()
