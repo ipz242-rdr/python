@@ -1,3 +1,4 @@
+from datetime import datetime
 def find_primes(n, output_format):
     try:
         limit = int(n)
@@ -103,7 +104,71 @@ test_data = [
 ]
 
 final_result = analyze_clients(test_data)
-print(final_result)
+
+
+def is_valid_date(date_str, date_format="%Y-%m_%d"):
+    try:
+        datetime.strptime(date_str, date_format)
+        return True
+    except (ValueError, TypeError):
+        return False
+
+def analyze_expenses(expenses):
+    category_totals = {}
+    invalid_dates = []
+    errors = []
+    valid_expenses = []
+    for expense in expenses:
+        if not isinstance(expense, tuple) or len(expense) != 3:
+            errors.append(expense)
+            continue
+        amount, category, date = expense
+
+        if not isinstance(amount, (int, float)) or amount is None:
+            errors.append(expense)
+            continue
+        if not isinstance(category, str) or not category:
+            errors.append(expense)
+            continue
+        if not isinstance(date, str) or date is None:
+            errors.append(expense)
+            continue
+        if not is_valid_date(date):
+            if date not in invalid_dates:
+                invalid_dates.append(date)
+
+        current_total_cat = category_totals.get(category, 0)
+        category_totals[category] = current_total_cat + amount
+        valid_expenses.append(expense)
+
+    max_expense = max(valid_expenses, key=lambda x: x[0]) if valid_expenses else None
+
+    result = {
+        "category_totals": category_totals,
+        "max_expense": max_expense,
+        "invalid_dates": invalid_dates,
+        "errors": errors
+    }
+    return result
+
+resultTask4 = analyze_expenses([
+(100, "офіс", "2024-06-01"),
+(200, "маркетинг", "2024-06-02"),
+(50, "офіс", "2024-13-01"),
+(None, "маркетинг", "2024-06-02"), # некоректна сума
+(100, None, "2024-06-01"), # некоректна категорія
+(100, "офіс", None), # некоректна дата
+"не кортеж", # невірний формат даних
+123, # невірний формат даних
+None, # невірний формат даних
+(100, "офіс"), # невірний формат всередині кортежу
+(100,), # невірний формат всередині кортежу
+(100, "офіс", "2024-06-01", "extra") # зайвий елемент у кортежі
+])
+
+
+print(resultTask4)
+
 # task1Test1 = find_primes(56, 'list')
 # print(task1Test1)
 # print('---------')
@@ -125,5 +190,7 @@ nested_data = [
 ]
 result = analyze_nested_categories(nested_data)
 # print(f"Результат: {result}")
+
+# print(final_result)
 
 
