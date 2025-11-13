@@ -103,7 +103,7 @@ test_data = [
     ("Дмитро", "новий", "dmytrorudenko061@gmail.com")
 ]
 
-final_result = analyze_clients(test_data)
+final_resultTask3 = analyze_clients(test_data)
 
 
 def is_valid_date(date_str, date_format="%Y-%m_%d"):
@@ -166,8 +166,49 @@ None, # невірний формат даних
 (100, "офіс", "2024-06-01", "extra") # зайвий елемент у кортежі
 ])
 
+def filter_reports(reports, output_format, keyword):
+    filtered_reports = []
+    errors = []
 
-print(resultTask4)
+    for report in reports:
+        if not isinstance(report, tuple) or len(report) != 3:
+            errors.append(report)
+            continue
+        title = report[0]
+        author = report[1]
+        format_file = report[2]
+
+        if not all(isinstance(x, str) for x in (title, author, format_file)):
+            errors.append(report)
+            continue
+
+        if not title or not author or not format_file:
+            errors.append(report)
+            continue
+
+        if format_file.lower() == output_format.lower() and keyword.lower() in (title + author).lower():
+            filtered_reports.append(report)
+
+    return (filtered_reports, len(filtered_reports), errors)
+
+
+resultTask5 = filter_reports(
+[
+("Звіт1", "Іван Іванов", "pdf"),
+("Звіт2", "Олена Петрівна", "docx"),
+("", "Іван Іванов", "pdf"), # некоректна назва
+("Звіт3", "", "pdf"), # некоректний автор
+("Звіт4", "Петро Сидоров", ""), # некоректний формат
+"не кортеж", # невірний формат даних
+123, # невірний формат даних
+None, # невірний формат даних
+("Звіт5",), # невірний формат всередині кортежу
+("Звіт6", "Іван Іванов"), # невірний формат всередині кортежу
+("Звіт7", "Іван Іванов", 123), # невірний тип для формату
+],
+"pdf",
+"Іва"
+)
 
 # task1Test1 = find_primes(56, 'list')
 # print(task1Test1)
@@ -188,9 +229,10 @@ nested_data = [
     {"офіс": 300},
     [{"офіс": 100, "extra": 1}]
 ]
-result = analyze_nested_categories(nested_data)
-# print(f"Результат: {result}")
+resultTask2 = analyze_nested_categories(nested_data)
+# print(f"Результат: {resultTask2}")
 
-# print(final_result)
-
+# print(final_resultTask3)
+# print(resultTask4)
+print(resultTask5)
 
