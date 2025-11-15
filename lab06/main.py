@@ -1,3 +1,6 @@
+import  os
+from typing import List
+
 def task1():
     numbers = []
     try:
@@ -54,7 +57,39 @@ def task3():
         print(line)
 
 
+def task4():
+    file_input = "learning_python.txt"
+    new_katalog = "new_folder"
+    file_true = os.path.join(new_katalog, "file_true.txt")
+    file_false = os.path.join(new_katalog, "file_false.txt")
+    with open(file_input, "r", encoding="UTF-8") as file:
+        lines = [line.strip() for line in file if line.strip()]
+
+    lines_true = []
+    lines_false = []
+
+    for line in lines:
+        new_line = line.replace("Python", "C")
+        print(f"{new_line}")
+        while True:
+            answer_task = input("Чи правильна ця фраза для мови С yes/no: ").strip().lower()
+            if answer_task in ["y", "yes"]:
+                lines_true.append(new_line)
+                break
+            elif answer_task in ["n", "no"]:
+                lines_false.append(new_line)
+                break
+            else:
+                print("Введіть (yes або no)")
+    with open(file_true, "w", encoding="UTF-8") as filetrue:
+        filetrue.write("\n".join(lines_true))
+    with open(file_false, "w", encoding="UTF-8") as filefalse:
+        filefalse.write("\n".join(lines_false))
+    print(f"результат записано в {new_katalog}")
+
+
 # task1()
 # task2()
-task3()
+# task3()
+task4()
 
