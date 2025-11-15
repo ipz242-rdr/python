@@ -42,6 +42,19 @@ def task2():
                 file_num.write(f"{num} - не парне число\n")
 
 
+def task3():
+    with open("learning_python.txt", "r", encoding="UTF-8") as myfile:
+        lines = [line.strip() for line in myfile if line.strip()]
+    print("Вміст файлу: ")
+    for line in lines:
+        print(line)
+    sorted_lines = sorted(lines, key=len, reverse=True)
+    print("вміст після сортування")
+    for line in sorted_lines:
+        print(line)
+
+
 # task1()
-task2()
+# task2()
+task3()
 
