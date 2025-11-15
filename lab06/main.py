@@ -22,5 +22,26 @@ def task1():
         print(f"Помилк апри записі у файл {e}")
 
 
-task1()
+def task2():
+    text_user = (input("Введіть цілі числа через пробіл: ").strip()).split()
+    numbers = []
+    for n in text_user:
+        try:
+            numbers.append(int(n))
+        except ValueError:
+            print(f"{n} не є цілим числом, тому ми його пропустимо")
+    if not numbers:
+        print("Ви нічого не ввели")
+        return
+
+    with open("numbers_task2.txt", "w", encoding="UTF-8") as file_num:
+        for num in numbers:
+            if num % 2 == 0:
+                file_num.write(f"{num} - парне число\n")
+            else:
+                file_num.write(f"{num} - не парне число\n")
+
+
+# task1()
+task2()
 
