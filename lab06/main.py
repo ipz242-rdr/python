@@ -1,6 +1,10 @@
 import  os
+import time
 from typing import List
 import datetime
+import re
+from collections import Counter
+import math
 
 def task1():
     numbers = []
@@ -104,12 +108,86 @@ def task5():
             time_now = datetime.datetime.now().strftime("%Y-%m-%d %H-:%M:%S")
             file.write(f"[{time_now}] {greeting}\n")
     with open(file_name, "a", encoding="UTF-8") as file:
-        last_time = datetime.datetime.now().strftime("%Y-%m-%d %H-:%M:%S")
+        last_time = datetime.datetime.now().strftime
         file.write(f"Останні зміни: {last_time}\n")
+
+
+def task6():
+    file_name = "3000words_file.txt"
+    result_file = "analys_res.txt"
+    start_time = time.time()
+    start_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H-:%M:%S")
+
+    with open(file_name, "r", encoding="UTF-8") as file:
+        text_in_file = file.read().strip()
+    if not text_in_file:
+        print("Файл порожній")
+        return
+    if not re.search(r"[a-zA-Z]", text_in_file):
+        print("Текст не містить англійських літер(слів)")
+        return
+    text_in_file_lower = text_in_file.lower()
+    all_words = re.findall(r"[a-zA-Z]+", text_in_file_lower)
+    words_count = len(all_words)
+    print(f"У файлі міститься {words_count} cлів")
+
+    if words_count > 3000:
+        print(f"У файлі більше ніж 3000 слів({words_count}), скоротіть текст")
+    while True:
+        print("Виберіть результат виводу\n")
+        print("1: Частота літер\n")
+        print("2: Частота слів (усі)\n")
+        print("3: Частота слів (ті що повторюються)\n")
+        print("0: Вихід з програми\n")
+        choice = input("Введіть 1, 2, 3, або 0: ").strip()
+
+        if choice == "0":
+            print("Завершення роботи програми")
+            return
+        elif choice not in ["1", "2", "3"]:
+            print("Невірний вибір! Спробуйте ще раз.\n")
+            continue
+        if choice == "1":
+            letter_chast = {}
+            for chast in text_in_file_lower:
+                if chast.isalpha():
+                    letter_chast[chast] = letter_chast.get(chast, 0) + 1
+            result_data = sorted(letter_chast.items(), key=lambda x: x[1], reverse=True)
+            title_in_file = "Частота літер у тексті"
+        elif choice == "2":
+            word_chast = {}
+            for word in all_words:
+                word_chast[word] = word_chast.get(word, 0) + 1
+            result_data = sorted(word_chast.items(), key=lambda x: x[1], reverse=True)
+            title_in_file = "Частота всіх англійських слів у тексті"
+        elif choice == "3":
+            word_chast = {}
+            for word in all_words:
+                word_chast[word] = word_chast.get(word, 0) + 1
+
+            filtered = list(filter(lambda x: x[1] >= 2, word_chast.items()))
+            result_data = sorted(filtered, key=lambda x: x[1], reverse=True)
+            title_in_file = "Частота всіх англійських слів, що зустрічаються більше 2 разів"
+        end_time = time.time()
+        execution_time = round(end_time - start_time, 3)
+        last_modif = datetime.datetime.fromtimestamp(os.path.getmtime(file_name)).strftime("%Y-%m-%d %H:%M:%S")
+        print(f"\n{title_in_file}:")
+        for item, count in result_data[:20]:
+            print(f"{item} - {count} разів")
+        with open(result_file, "w", encoding="UTF-8") as outfile:
+            outfile.write(f"час створення результату: {start_datetime}\n")
+            outfile.write(f"час останніх змін у файлі: {last_modif}\n")
+            outfile.write(f"час виконання аналізу: {execution_time}\n")
+            outfile.write(f"{title_in_file}\n\n")
+
+            for item, count in result_data:
+                outfile.write(f"{item} - {count} разів\n")
+        print(f"Час виконання: {execution_time} секунд")
 
 
 # task1()
 # task2()
 # task3()
 # task4()
-task5()
+# task5()
+task6()
