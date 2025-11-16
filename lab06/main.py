@@ -3,8 +3,9 @@ import time
 from typing import List
 import datetime
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 import math
+import csv
 
 def task1():
     numbers = []
@@ -185,9 +186,111 @@ def task6():
         print(f"Час виконання: {execution_time} секунд")
 
 
+def task7():
+    input_file = "marks.lab6.csv"
+    output_file = "marks_result.txt"
+
+    with open(input_file, "r", encoding="UTF-8") as file:
+        reader = csv.reader(file)
+        data = list(reader)
+
+    if not data:
+        print("Файл порожній")
+        return
+
+    students_data = []
+    all_marks = []
+    time_marks = []
+    question_stats = defaultdict(lambda: {'correct': 0, 'total': 0})
+
+    for row in data:
+        if len(row) < 5:
+            continue
+
+        student_id = row[0].strip()
+        time_str = row[3].strip()
+        mark_str = row[4].replace(',', '.').strip()
+
+        if not mark_str or mark_str == '-':
+            continue
+
+        mark = float(mark_str)
+        minutes = int(time_str.split()[0])
+
+        answers = []
+        for x in row[5:]:
+            x_cleaned = x.strip().replace(',', '.')
+            if not x_cleaned or x_cleaned == '-':
+                answers.append(0.0)
+            else:
+                answers.append(float(x_cleaned))
+
+        students_data.append({
+            "student_id": student_id,
+            "mark": mark,
+            "minutes": minutes,
+            "answers": answers
+        })
+
+        all_marks.append(mark)
+        time_marks.append((mark, minutes))
+
+        for i, answer in enumerate(answers):
+            question_stats[i]['total'] += 1
+            if answer > 0:
+                question_stats[i]['correct'] += 1
+
+    if not students_data:
+        print("Не знайдено коректних даних студентів")
+        return
+
+    student_count = len(students_data)
+    mark_distribution = Counter(all_marks)
+
+    print(f"Кількість студентів: {student_count}")
+    print("\nРозподіл оцінок:")
+    for mark in sorted(mark_distribution.keys()):
+        print(f"  {mark:.2f}: {mark_distribution[mark]} студентів")
+
+    print("\nСередня оцінка за 1 хв:")
+    min_time = min(t[1] for t in time_marks)
+    max_time = max(t[1] for t in time_marks)
+    for minute in range(min_time, max_time + 1):
+        minute_marks = [m[0] for m in time_marks if m[1] == minute]
+        if minute_marks:
+            avg_marks = sum(minute_marks) / len(minute_marks)
+            print(f"{minute} хв: {avg_marks:.2f}")
+
+    time_marks.sort(key=lambda x: x[0] / x[1], reverse=True)
+    top5 = time_marks[:5]
+
+    with open(output_file, "w", encoding="utf-8") as file:
+        file.write("Статистика тестування\n")
+        file.write(f"Кількість студентів: {student_count}\n\n")
+
+        file.write("Розподіл оцінок:\n")
+        for mark in sorted(mark_distribution.keys()):
+            file.write(f"{mark:.2f}: {mark_distribution[mark]} студентів\n")
+
+        file.write("\nСтатистика по питаннях:\n")
+        for q_num, stats in question_stats.items():
+            correct = stats['correct']
+            total = stats['total']
+            correct_percent = (correct / total * 100) if total > 0 else 0
+            incorrect_percent = 100 - correct_percent
+            file.write(f"Питання {q_num + 1}: правильних {correct} ({correct_percent:.1f}%), "
+                       f"неправильних {total - correct} ({incorrect_percent:.1f}%)\n")
+
+        file.write("\nТоп 5 найкращих результатів:\n")
+        for i, (mark, time_spent) in enumerate(top5, 1):
+            ratio = mark / time_spent
+            file.write(f"{i}. Оцінка {mark:.2f} за {time_spent} хв (коефіцієнт: {ratio:.3f})\n")
+
+
 # task1()
 # task2()
 # task3()
 # task4()
 # task5()
-task6()
+# task6()
+task7()
