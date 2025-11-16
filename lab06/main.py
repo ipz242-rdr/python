@@ -1,5 +1,6 @@
 import  os
 from typing import List
+import datetime
 
 def task1():
     numbers = []
@@ -87,9 +88,28 @@ def task4():
         filefalse.write("\n".join(lines_false))
     print(f"результат записано в {new_katalog}")
 
+def task5():
+    file_name = "guest_book.txt"
+    if not os.path.exists(file_name):
+        with open(file_name, "w", encoding="UTF-8") as file:
+            create_time = datetime.datetime.now().strftime("%Y-%m-%d %H-:%M:%S")
+            file.write(f"Створено файл: {create_time}\n")
+    while True:
+        name_people = input("Введіть ім'я (або 'вихід' щоб завершити): ")
+        if name_people.lower() == "вихід":
+            break
+        greeting = f"Привіт {name_people}!"
+        print(greeting)
+        with open(file_name, "a", encoding="UTF-8") as file:
+            time_now = datetime.datetime.now().strftime("%Y-%m-%d %H-:%M:%S")
+            file.write(f"[{time_now}] {greeting}\n")
+    with open(file_name, "a", encoding="UTF-8") as file:
+        last_time = datetime.datetime.now().strftime("%Y-%m-%d %H-:%M:%S")
+        file.write(f"Останні зміни: {last_time}\n")
+
 
 # task1()
 # task2()
 # task3()
-task4()
-
+# task4()
+task5()
