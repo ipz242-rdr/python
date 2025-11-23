@@ -1,3 +1,4 @@
+import csv
 from datetime import date
 
 
@@ -52,3 +53,65 @@ except TypeError as e:
     print(f"Помилка вхідних даних: {e}")
 
 
+def modifier(filename):
+    all_data = []
+    with open(filename, "r", newline='', encoding='UTF-8') as file:
+        reader = csv.reader(file)
+        header = next(reader)
+        try:
+            surname_ind = header.index("surname")
+            name_ind = header.index("first_name")
+            date_ind = header.index("birth_date")
+            nick_name_ind = header.index("nickname")
+        except ValueError as e:
+            raise ValueError(f"Файл не містить обов'язковї колонки: {e}")
+        for row in reader:
+            try:
+                person_obj = Person(
+                    surname=row[surname_ind],
+                    first_name=row[name_ind],
+                    date_string=row[date_ind],
+                    nickname=row[nick_name_ind],
+                )
+                fullname = f"{person_obj.first_name} {person_obj.surname}, Псевдонім: {person_obj.nickname}"
+                row.insert(name_ind + 1, fullname)
+
+                age = person_obj.get_age()
+                row.append(age)
+                all_data.append(row)
+            except (TypeError, ValueError) as e:
+                print(f"Помилка обробки рядка {row}: {e}")
+                continue
+    header.insert(name_ind + 1, 'fullname')
+    header.append(age)
+
+    with open(filename, "w", newline='', encoding='UTF-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        writer.writerow(all_data)
+        print(f"файл '{filename}' успішно доданий вміст")
+
+
+def create_test_file(filename="test_contacts.csv"):
+    test_content = [
+        ['surname', 'first_name', 'nickname', 'birth_date'],
+        ['Коваль', 'Олександр', 'Олекс', '1998-07-25'],
+        ['Петренко', 'Марія', '', '2005-01-10']
+    ]
+    with open(filename, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerows(test_content)
+    print(f"Створено тестовий файл: {filename}")
+
+
+if __name__ == '__main__':
+    test_file = "test_contacts.csv"
+    create_test_file(test_file)
+
+    # Виклик основної функції
+    modifier(test_file)
+
+    # Перевірка результату
+    print("\n--- Вміст модифікованого файлу ---")
+    with open(test_file, 'r', encoding='utf-8') as f:
+        print(f.read())
