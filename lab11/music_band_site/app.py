@@ -1,16 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-
-# --- ВАЖЛИВО: Імпортуємо db та класи з models.py ---
+from datetime import datetime, date
 from models import db, User, Album
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///music.db'
 
-# --- ЗВ'ЯЗУЄМО БАЗУ З ДОДАТКОМ ---
-# Раніше тут було db = SQLAlchemy(app), тепер ми ініціалізуємо існуючу db:
+
 db.init_app(app)
 
 login_manager = LoginManager(app)
@@ -38,7 +36,6 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Тепер User.query буде працювати коректно
         user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password, password):
@@ -59,7 +56,6 @@ def logout():
 
 @app.route('/albums')
 def albums():
-    # Беремо всі альбоми з бази
     all_albums = Album.query.all()
     return render_template('albums.html', albums=all_albums)
 
@@ -69,12 +65,23 @@ def albums():
 def create_album():
     if request.method == 'POST':
         title = request.form['title']
-        year = request.form['year']
         description = request.form['description']
-        cover_url = request.form['cover']  # Просто беремо текст посилання
+        cover_url = request.form['cover']
 
-        # Створюємо запис (зверни увагу, тепер cover_image це URL)
-        new_album = Album(title=title, year=year, description=description, cover_image=cover_url)
+        date_str = request.form['release_date']
+
+        try:
+            # Цей рядок каже: "Візьми текст date_str і прочитай його як Рік-Місяць-День"
+            release_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return "Помилка формату дати", 400
+
+            # --- ПЕРЕВІРКА НА МАЙБУТНЄ ---
+        if release_date > date.today():
+            flash(f"Помилка: Дата не може бути в майбутньому! (Сьогодні {date.today()})")
+            return render_template('create_album.html')
+
+        new_album = Album(title=title, release_date=release_date, description=description, cover_image=cover_url)
 
         db.session.add(new_album)
         db.session.commit()
@@ -114,8 +121,16 @@ def edit_album(id):
 
     return render_template('edit_album.html', album=album)
 
+@app.route('/album/<int:id>')
+def album_detail(id):
+    album = Album.query.get_or_404(id)
+    return render_template('album_detail.html', album=album)
+
+@app.route('/history')
+def history():
+    return render_template('history.html')
+
 if __name__ == '__main__':
-    # Створюємо таблиці, якщо їх ще немає (автоматично при запуску)
     with app.app_context():
         db.create_all()
     app.run(debug=True)

@@ -3,39 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Музичний Гурт{% endblock %}</title>
-    <style>
-        /* Швидкі стилі, щоб виглядало охайно */
-        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        nav { background: #333; padding: 10px; }
-        nav a { color: white; text-decoration: none; margin-right: 15px; }
-        nav a:hover { text-decoration: underline; }
-        .content { margin-top: 20px; }
-        footer { margin-top: 50px; font-size: 0.8em; color: gray; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+<nav>
+    <a href="{{ url_for('index') }}">Головна</a>
+    <a href="{{ url_for('history') }}">Історія</a>
+    <a href="{{ url_for('albums') }}">Альбоми</a>
 
-    <nav>
-        <a href="{{ url_for('index') }}">Головна</a>
-        <a href="#">Історія</a>
-        <a href="#">Альбоми</a>
+    {% if current_user.is_authenticated %}
+    <span style="margin-left: 20px; color: green;">Привіт, {{ current_user.username }}!</span>
+    <a href="{{ url_for('logout') }}" style="color: red;">Вихід</a>
+    {% else %}
+    <a href="{{ url_for('login') }}">Вхід</a>
+    {% endif %}
+</nav>
 
-        {% if current_user.is_authenticated %}
-            <span style="margin-left: 20px; color: green;">Привіт, {{ current_user.username }}!</span>
-            <a href="{{ url_for('logout') }}" style="color: red;">Вихід</a>
-        {% else %}
-            <a href="{{ url_for('login') }}">Вхід</a>
-        {% endif %}
-    </nav>
-
-    <div class="content">
-        {% block content %}{% endblock %}
+<div class="content">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div style="max-width: 600px; margin: 20px auto;">
+        {% for message in messages %}
+        <div class="flash-message" style="background-color: #ff4444; color: white; padding: 15px; border-radius: 5px; margin-bottom: 10px; text-align: center;">
+            {{ message }}
+        </div>
+        {% endfor %}
     </div>
+    {% endif %}
+    {% endwith %}
 
-    <footer>
-        <hr>
-        <p>© 2025 Офіційний сайт гурту</p>
-    </footer>
+    {% block content %}
+    {% endblock %}
+</div>
 
+<footer>
+    <hr>
+    <p>© 2025 Офіційний сайт гурту</p>
+</footer>
+<script>
+        setTimeout(function() {
+            var messages = document.querySelectorAll('.flash-message');
+
+            messages.forEach(function(msg) {
+                msg.style.transition = "opacity 1s ease";
+                msg.style.opacity = "0";
+
+
+                setTimeout(function() {
+                    msg.remove();
+                }, 1000);
+            });
+        }, 3000);
+    </script>
+</body>
 </body>
 </html>
