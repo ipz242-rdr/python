@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Музичний Гурт{% endblock %}</title>
+    <style>
+        /* Швидкі стилі, щоб виглядало охайно */
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        nav { background: #333; padding: 10px; }
+        nav a { color: white; text-decoration: none; margin-right: 15px; }
+        nav a:hover { text-decoration: underline; }
+        .content { margin-top: 20px; }
+        footer { margin-top: 50px; font-size: 0.8em; color: gray; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="{{ url_for('index') }}">Головна</a>
+        <a href="#">Історія</a> <a href="#">Альбоми</a> <a href="#">Вхід</a>    </nav>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <hr>
+        <p>© 2025 Офіційний сайт гурту</p>
+    </footer>
+
+</body>
+</html>
