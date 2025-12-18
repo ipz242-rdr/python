@@ -16,4 +16,4 @@ class Album(db.Model):
     title = db.Column(db.String(100), nullable=False)
     year = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text, nullable=True)
-    cover_image = db.Column(db.String(100), nullable=True)
+    cover_image = db.Column(db.Text, nullable=True)
