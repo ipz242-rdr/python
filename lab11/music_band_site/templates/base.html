@@ -17,7 +17,16 @@
 
     <nav>
         <a href="{{ url_for('index') }}">Головна</a>
-        <a href="#">Історія</a> <a href="#">Альбоми</a> <a href="#">Вхід</a>    </nav>
+        <a href="#">Історія</a>
+        <a href="#">Альбоми</a>
+
+        {% if current_user.is_authenticated %}
+            <span style="margin-left: 20px; color: green;">Привіт, {{ current_user.username }}!</span>
+            <a href="{{ url_for('logout') }}" style="color: red;">Вихід</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Вхід</a>
+        {% endif %}
+    </nav>
 
     <div class="content">
         {% block content %}{% endblock %}
