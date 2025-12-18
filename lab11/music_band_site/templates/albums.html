@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Дискографія{% endblock %}
+
+{% block content %}
+<h1>Наші Альбоми</h1>
+
+{% if current_user.is_authenticated %}
+<a href="{{ url_for('create_album') }}" style="background: green; color: white; padding: 10px; text-decoration: none;">+
+    Додати новий альбом</a>
+<hr>
+{% endif %}
+
+<div class="albums-list">
+    {% for album in albums %}
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; display: flex;">
+        <div style="margin-right: 20px;">
+            <img src="{{ album.cover_image }}" width="150" alt="Cover">
+        </div>
+        <div>
+            <h3>{{ album.title }} ({{ album.year }})</h3>
+            <p>{{ album.description }}</p>
+
+            {% if current_user.is_authenticated %}
+            <br>
+            <div style="margin-top: 10px;">
+                <a href="{{ url_for('edit_album', id=album.id) }}"
+                   style="background-color: #ffc107; color: black; padding: 5px 10px; text-decoration: none; border-radius: 5px; margin-right: 5px;">Редагувати</a>
+
+                <a href="{{ url_for('delete_album', id=album.id) }}"
+                   style="background-color: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 5px;"
+                   onclick="return confirm('Ви точно хочете видалити цей альбом?')">Видалити</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <p>Поки що немає альбомів.</p>
+    {% endfor %}
+</div>
+{% endblock %}

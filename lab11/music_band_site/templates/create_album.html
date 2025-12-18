@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Додати альбом{% endblock %}
+
+{% block content %}
+<h2>Додати новий альбом</h2>
+
+<form method="POST">
+    <p>
+        <label>Назва альбому:</label><br>
+        <input type="text" name="title" required>
+    </p>
+    <p>
+        <label>Рік випуску:</label><br>
+        <input type="number" name="year" required>
+    </p>
+    <p>
+        <label>Опис:</label><br>
+        <textarea name="description" rows="5"></textarea>
+    </p>
+    
+    <p>
+        <label>Посилання на обкладинку (URL):</label><br>
+        <input type="url" name="cover" placeholder="https://example.com/image.jpg" required>
+    </p>
+    
+    <button type="submit">Зберегти альбом</button>
+</form>
+{% endblock %}
