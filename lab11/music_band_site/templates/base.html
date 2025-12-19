@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Музичний Гурт{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('index') }}">Головна</a>
+    <a href="{{ url_for('history') }}">Історія</a>
+    <a href="{{ url_for('albums') }}">Альбоми</a>
+
+    {% if current_user.is_authenticated %}
+    <span style="margin-left: 20px; color: green;">Привіт, {{ current_user.username }}!</span>
+    <a href="{{ url_for('logout') }}" style="color: red;">Вихід</a>
+    {% else %}
+    <a href="{{ url_for('login') }}">Вхід</a>
+    {% endif %}
+</nav>
+
+<div class="content">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div style="max-width: 600px; margin: 20px auto;">
+        {% for message in messages %}
+        <div class="flash-message" style="background-color: #ff4444; color: white; padding: 15px; border-radius: 5px; margin-bottom: 10px; text-align: center;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+</div>
+
+<footer>
+    <hr>
+    <p>© 2025 Офіційний сайт гурту</p>
+</footer>
+<script>
+        setTimeout(function() {
+            var messages = document.querySelectorAll('.flash-message');
+
+            messages.forEach(function(msg) {
+                msg.style.transition = "opacity 1s ease";
+                msg.style.opacity = "0";
+
+
+                setTimeout(function() {
+                    msg.remove();
+                }, 1000);
+            });
+        }, 3000);
+    </script>
+</body>
+</body>
+</html>
